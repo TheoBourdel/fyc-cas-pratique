@@ -1,28 +1,76 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
-import { TestService } from './services/test.service';
+import { MenuComponent } from './@shared/components/menu/menu.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'client';
+  folders: any[] = [];
+  documents: any[] = [];
 
-  constructor(private testService: TestService) {}
+  folderForm: FormGroup = new FormGroup({});
+  documentForm: FormGroup = new FormGroup({});
 
-  ngOnInit(): void {
-    this.testService.getTest().subscribe({
-      next: (data) => {
-        console.log(data);
-      },
-      error: (error) => {
-        console.log(error);
-      }
-    })
+  visibleFolder: boolean = false;
+  visibleDocument: boolean = false;
+  selectedFolderId: number = 0;
+  selectedDocumentId: number = 0;
+
+  constructor(
+    private fb: FormBuilder,
+  ) { 
+    this.folderForm = this.fb.group({
+      name: ['', Validators.required],
+      description: ['']
+    });
+
+    this.documentForm = this.fb.group({
+      title: ['', Validators.required],
+    });
   }
+
+  ngOnInit() {
+  }
+
+  getFolders() {
+  } 
+
+  getDocuments() {
+  }
+
+  deleteDocument(documentId: number) {
+  }
+
+  deleteFolder(folderId: number) {
+  }
+
+  updateFolder() {
+    const formData = this.folderForm.value;
+  }
+
+  updateDocument() {
+    const formData = this.documentForm.value;
+  }
+
+  showUpdateFolderDialog(folder: any): void {
+    this.selectedFolderId = folder.id;
+    this.folderForm.patchValue({
+      name: folder.name,
+      description: folder.description
+    });
+
+    this.visibleFolder = true;
+  }
+
+  showUpdateDocumentDialog(document: any): void {
+    this.selectedDocumentId = document.id;
+    this.documentForm.patchValue({
+      title: document.title,
+    });
+
+    this.visibleDocument = true;
+  } 
 }
